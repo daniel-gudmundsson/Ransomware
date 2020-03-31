@@ -6,7 +6,6 @@ class KeyManager:
 
 
     def __init__(self):
-        print('hello')
         host = 'balarama.db.elephantsql.com'
         database = 'mtpnwqzr'
         user = 'mtpnwqzr'
@@ -24,11 +23,15 @@ class KeyManager:
             print ("Error while connecting to PostgreSQL", error)
     
     def insertKey(self, computer_id, key):
+        """Inserts key to the database with the computer_id"""
+
         self.cursor.execute('INSERT INTO "public"."keys"(computer_id, key, payed) VALUES(%s, %s, %s)', (computer_id, key, "false"))
         self.connection.commit()
 
 
     def getKey(self, computer_id):
+        """Gets a key from the database with given computer_id"""
+
         self.cursor.execute('SELECT key FROM "public"."keys" WHERE computer_id = %s', (computer_id,))
         data = self.cursor.fetchall()
         if (data != []):
