@@ -52,6 +52,7 @@ class Ransom:
             f.truncate()
 
     def startDecryption(self):
+        self.key = self.keyManager.getKey(get_mac())
         if self.key == '':
             raise ValueError('The key is empty. Cannot decrypt without a key')
             print('No key') ### TODO díla við þetta
@@ -129,5 +130,10 @@ else: #Encrypt is default
 
 """
         
-
+path = os.path.realpath('ransom.py')
+print(path)
+parts = path.split('/')
+path = '/'.join(parts[:-1])
+path+='/testDIr/'
+print(path)
     
