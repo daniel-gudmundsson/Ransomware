@@ -33,6 +33,7 @@ class GUI:
     def encrypt(self):
         print('Encrypted')
         self.ransom.encrypt()
+        print(self.ransom.root)
         self.window.destroy()
         self.loadEncrypted()
 
