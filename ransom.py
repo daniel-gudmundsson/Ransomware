@@ -53,6 +53,7 @@ class Ransom:
 
     def startDecryption(self):
         self.key = self.keyManager.getKey(get_mac())
+        print(self.key)
         if self.key == '':
             raise ValueError('The key is empty. Cannot decrypt without a key')
             print('No key') ### TODO díla við þetta

