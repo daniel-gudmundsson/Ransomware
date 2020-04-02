@@ -26,7 +26,7 @@ class KeyManager:
     def insertKey(self, computer_id, key):
         """Inserts key to the database with the computer_id"""
 
-        self.cursor.execute('INSERT INTO "public"."keys"(computer_id, key, payed) VALUES(%s, %s, %s)', (str(computer_id), key, "false"))
+        self.cursor.execute('INSERT INTO "public"."keys"(computer_id, key, payed) VALUES(%s, %s, %s)', (str(computer_id), str(key), "false"))
         self.connection.commit()
 
 
@@ -36,7 +36,7 @@ class KeyManager:
         self.cursor.execute('SELECT key FROM "public"."keys" WHERE computer_id = %s AND payed = TRUE', (str(computer_id),))
         data = self.cursor.fetchall()
         if (data != []):
-            key = data[0][0] #First row, first column. Should only return one row and column.
+            key = str(data[0][0]) #First row, first column. Should only return one row and column.
             return key
         return ''
 

