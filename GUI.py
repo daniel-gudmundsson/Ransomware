@@ -11,6 +11,10 @@ import time
 #pyinstaller --onefile --hidden-import=tkinter  GUI.py
 #pip3 install Pillow
 
+#Saeki path ad myndinni shield. Tharf ad gera thar sem vid gerum eine executable skra.
+bundle_dir = getattr(sys, '_MEIPASS', path.abspath(path.dirname(__file__)))
+path_to_dat = path.join(bundle_dir, 'shield.png')
+
 
 
 class GUI:
@@ -116,7 +120,7 @@ How do I pay?
         Grid.columnconfigure(self.window, 0, weight=1)
         lbl.grid(row=0,column = 0, pady=10)
 
-        img = Image.open("shield.png")
+        img = Image.open(path_to_dat)
         render = ImageTk.PhotoImage(img)
         img = Label(self.window, image=render)
         img.image = render
