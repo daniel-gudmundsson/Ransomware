@@ -5,7 +5,8 @@ from KeyManager import KeyManager
 from uuid import getnode as get_mac
 from PIL import Image, ImageTk
 import time
-
+from os import path
+import sys
 
 #sudo apt-get install python3-tk
 #pyinstaller --onefile --hidden-import=tkinter  GUI.py
