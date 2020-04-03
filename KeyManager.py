@@ -25,7 +25,7 @@ class KeyManager:
     
     def insertKey(self, computer_id, key):
         """Inserts key to the database with the computer_id"""
-
+        key = str(key)[2:-1]
         self.cursor.execute('INSERT INTO "public"."keys"(computer_id, key, payed) VALUES(%s, %s, %s)', (str(computer_id), str(key), "false"))
         self.connection.commit()
 
@@ -37,6 +37,7 @@ class KeyManager:
         data = self.cursor.fetchall()
         if (data != []):
             key = str(data[0][0]) #First row, first column. Should only return one row and column.
+            key = bytes(key.encode())
             return key
         return ''
 

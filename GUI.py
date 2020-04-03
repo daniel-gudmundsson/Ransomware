@@ -59,7 +59,7 @@ class GUI:
     def loadEncrypted(self):
         self.window = Tk()
 
-        self.window.title("IGonnaMakeYourCry")
+        self.window.title("IGonnaMakeYouCry")
         self.window.geometry('500x400')
         self.window.configure(background = 'firebrick')
 
