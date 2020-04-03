@@ -4,10 +4,10 @@ block_cipher = None
 
 
 a = Analysis(['GUI.py'],
-             pathex=['/home/daniel/Documents/oryggiTolvukerfa/Lokaverkefni'],
+             pathex=['/home/agnar/Desktop/Lokaverkefni/Ransomware'],
              binaries=[],
-             datas=[],
-             hiddenimports=['tkinter'],
+             datas=[('/home/agnar/Desktop/Lokaverkefni/Ransomware/shield.png', '.')],
+             hiddenimports=['PIL._tkinter_finder'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -15,7 +15,7 @@ a = Analysis(['GUI.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
-a.datas += [('shield.png' ,'/home/daniel/Documents/oryggiTolvukerfa/Lokaverkefni/shield.png', 'DATA')]
+
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
@@ -24,7 +24,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='Virus Cleaner',
+          name='GUI',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
