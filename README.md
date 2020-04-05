@@ -26,7 +26,7 @@ gíslatökubúnað. Hugbúnaðurinn samanstendur af þremur python skriftum sem 
 * **KeyManager.py:** Sér um gagnagrunnstengingar
 * **GUI.py:** Útfærir viðmótið
 
-Þessu er síðan öllu pakkað saman í eina keyranlega, **VirusCleaner**, skrá sem finna má í **dist** möppunni.
+Þessu er síðan öllu pakkað saman í eina keyranlega, **Virus Cleaner**, skrá sem finna má í **dist** möppunni.
 
 # Keyrsluleiðbeiningar
 
