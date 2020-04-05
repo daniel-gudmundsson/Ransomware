@@ -98,11 +98,7 @@ class Ransom:
         """
         with open(file, 'rb+') as f:
             content = f.read()
-            print(self.key)
-            print(len(self.key))
             decryptedContent = self.fernet.decrypt(content)
-            print(self.key)
-            print(len(self.key))
             f.seek(0) ## So we overwrite it
             f.write(decryptedContent)
             f.truncate()
