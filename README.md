@@ -57,14 +57,16 @@ Install requirements
 * sudo apt-get install python3-dev
 * pip install -r requirements.txt
 
-To exit VENV
-deactivate
-
-
 Þá er hægt að keyra forritð með
 * python3 GUI.py
 
+To exit VENV
+* deactivate
+
+
+
+
 Ef það er áhugi á að búa til nýja keyranlega skrá er hægt að keyra
 pyinstaller GUI.spec 
-áður en það er gert þarf að breyta slóðinni fyrir datas og pathex þannig hún sé rétt fyrir tölvuna þína.
+áður en það er gert þarf að breyta slóðinni fyrir datas og pathex inn í GUI.spec þannig hún sé rétt fyrir tölvuna þína.
 
