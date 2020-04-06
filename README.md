@@ -32,3 +32,21 @@ gíslatökubúnað. Hugbúnaðurinn samanstendur af þremur python skriftum sem 
 
 Keyranlega skráin inniheldur alla þá pakka sem þarf svo það þarf ekki að setja upp neina pakka. Til að keyra hugbúnaðinn er nóg að keyra 
 keyrsluskránna. Notendaviðmótið er einfalt og ætti það að skýra sig sjálft hvernig það virkar.
+
+
+
+Setja upp:
+sudo apt-get install python3-tk
+sudo apt-get install python3-psycopg2
+sudo apt-get install python3-dev
+
+Setja upp pip pakka í virtualenv:
+pip install -r requirements.txt
+
+Þá er hægt að keyra forritið með
+python3 GUI.py
+
+Ef það er áhugi á að búa til nýja keyranlega skrá er hægt að keyra
+pyinstaller GUI.spec 
+áður en það er gert þarf að breyta slóðinni fyrir datas og pathex þannig hún sé rétt fyrir tölvuna þína.
+
