@@ -1,7 +1,7 @@
 altgraph==0.17
 cffi==1.14.0
 cryptography==2.9
-Pillow==7.1.1
+Pillow==9.0.0
 pkg-resources==0.0.0
 psycopg2-binary==2.8.5
 pycparser==2.20
